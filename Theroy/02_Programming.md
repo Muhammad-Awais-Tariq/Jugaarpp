@@ -1,57 +1,112 @@
-# Need for progamming
+# The Need for Programming
 
-computer has a control unit composed of the logic gates and then based on the instruction provided the control unit do the sepecific task for example if we assign 1001 instruction to the adding function whenever  control unit sees 1001 it adds the number so thats how using the control unit progamm is executed its a two stage process
-- Doing the action
-- Saving the action
+A computer's **control unit** is composed of logic gates. It reads binary instructions and executes a specific operation for each one. For example, the instruction `1001` might be mapped to the addition operation — whenever the control unit encounters `1001`, it adds two numbers.
 
-## Problems
-In the early stages beacuse of this approach the problem arose as we hv to input the machine code 1s and 0s to perform the action these were done uses swotches punch cards etc to input the data
+Program execution is a two-stage cycle:
+1. **Fetch** — retrieve the instruction
+2. **Execute** — carry out the action and save the result
 
-## Solution
-Based on the problem the solution which was deduced was to use the compilier its the software that converts the high level code into low level machine code
+## The Problem
 
-- The code is written in human readable way source code
-- compiler takes the code
-- converts it into binary code machine code
+In the early days of computing, programmers had to input raw machine code (1s and 0s) directly. This was done through physical means such as toggle switches and punch cards — a tedious and error-prone process.
 
-# Steps before Interpretation
+## The Solution: Compilers
 
-## lexical Analysis / Tokenzation
-It breaks down the text into token the token can have two values like for 3 it can store 3 as a value and int as its type for + it can store + as value and operators as the type so this is the lexical analysis the process of breaking down the input into tokens which will b stored in the list and then this will b passed to the parser
-if we have to code like
+The solution was the **compiler** — software that translates human-readable code into binary machine code. The process works like this:
+
+1. A programmer writes **source code** in a human-readable language
+2. The **compiler** reads that source code
+3. It outputs **machine code** (binary) that the CPU can execute directly
+
+---
+
+# How a Compiler Works: The Interpretation Pipeline
+
+## Stage 1 — Lexical Analysis (Tokenization)
+
+The first stage breaks raw source code into **tokens** — small labelled units of meaning. Each token stores two things:
+- Its **value** (the literal text)
+- Its **type** (what kind of thing it is)
+
+**Example:**
+
+Input:
+```
 1 + 3
-it will return
-[token(1,INT),token(+,OP),token(3,INT)]
+```
 
-## Parser / Parsing
-It is used to process the tokens given by the lexical analysis to process em we will use the parser. In simple way parsing is understanding the patterns in the data
-the parser does this using the bunch of the grammer rules for example we create a rule that our language can only add 2 numbers then this is the rule so the next time when we will give it the list of token it will look that the first token is int the second is operater and the third is int as well and then in doing so it can give us the output
+Output (token list):
+```
+[ Token(1, INT), Token(+, OP), Token(3, INT) ]
+```
 
-### ways to write the rules in parser
-- BNF : Its a way of writing the grammer rules example
-The things in the <> are called the non terminal whereas the things like numbers and operators are called terminal
-<expression> := <term> + <expression> | <term> - <expression> | <term> its a way of writing the rules the line repsent or
+This token list is then passed to the next stage: the parser.
 
-E = Term ((+|-)T)* The straic outside shows that the term inside the bracket can b repeated 0 or more times
+---
 
-<term> := <factor> * <term> | <factor> / <term> | <factor>
+## Stage 2 — Parsing
 
-<Factor> := <integer>
-<integer> := 0|1|2|3|......n 
+The parser takes the token list and checks whether it forms a valid, meaningful structure according to a set of **grammar rules**. In short: lexical analysis breaks code into words; parsing checks that those words form valid sentences.
 
-### How will we parse 1+2*5
-For this we will use the parser and the parser converts it into the binary tree and it can b written as 
-[1+[2*5]]
+### Writing Grammar Rules: BNF (Backus-Naur Form)
 
-### Expession
-Its the term that is added or subtracted from any other term or a value 
+BNF is a standard notation for defining grammar rules. It uses two types of elements:
+- **Non-terminals** — abstract placeholders written in `<angle brackets>`, e.g. `<expression>`
+- **Terminals** — literal values like numbers and operators
 
-### tree
-For the equation [1+[2*5]] the tree can be
+The `|` symbol means **"or"**, and `:=` means **"is defined as"**.
 
-root node : +
-left child : 1
-right child : *
-childs of right child
-left child : 2
-right child : 5
+**Example grammar:**
+
+```
+<expression> := <term> + <expression>
+              | <term> - <expression>
+              | <term>
+
+<term>       := <factor> * <term>
+              | <factor> / <term>
+              | <factor>
+
+<factor>     := <integer>
+<integer>    := 0 | 1 | 2 | 3 | ... n
+```
+
+An alternative, more compact notation uses `*` to mean "zero or more repetitions":
+
+```
+E = Term ((+ | -) Term)*
+```
+
+---
+
+### Key Concepts
+
+**Expression**
+Any value, or a term combined with another term via addition or subtraction.
+
+**Parse Tree**
+The parser converts a valid expression into a **binary tree**, which represents the order of operations explicitly.
+
+For `1 + 2 * 5`, the parser respects operator precedence and produces:
+
+```
+1 + [2 * 5]
+```
+
+Which maps to this tree:
+
+```
+        +
+       / \
+      1   *
+         / \
+        2   5
+```
+
+- **Root node:** `+`
+- **Left child:** `1`
+- **Right child:** `*`
+  - **Left child:** `2`
+  - **Right child:** `5`
+
+The tree makes evaluation order unambiguous — the deepest nodes (`2 * 5`) are evaluated first, and their result is then added to `1`.
