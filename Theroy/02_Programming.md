@@ -42,3 +42,16 @@ E = Term ((+|-)T)* The straic outside shows that the term inside the bracket can
 ### How will we parse 1+2*5
 For this we will use the parser and the parser converts it into the binary tree and it can b written as 
 [1+[2*5]]
+
+### Expession
+Its the term that is added or subtracted from any other term or a value 
+
+### tree
+For the equation [1+[2*5]] the tree can be
+
+root node : +
+left child : 1
+right child : *
+childs of right child
+left child : 2
+right child : 5
