@@ -86,3 +86,24 @@ Takes `self` as its first argument, giving it access to that specific object's d
 
 **Class Method (`update_balance`)**
 Decorated with `@classmethod` and takes `cls` instead of `self`. It operates on the class itself rather than any individual instance, so it can be called directly on the class without creating an object first.
+
+## Inheritance in python
+```python
+# creating a web page example
+class page:
+    def __init__(self,heading,body):
+        self.heading = heading
+        self.body = body
+    
+    def create_page(self):
+        html = f"<h1>{self.heading}</h1><p>{self.body}</p>"
+        return html
+    
+class contact(page):    # since contact is a page it will inherit the properties of a page
+    def __init__(self,heading,body,email):
+        super().__init__(heading,body)  # we are passing the heading and body to the parent using its constructor
+        self.email = email
+
+contact_page = contact("heading","this is the body") #its inheriting both of these things from the page even though it itself is empty
+isinstance(contact_page , page) # it will output true beacuse the object of the contact class is the instance of the parent class as well 
+```
