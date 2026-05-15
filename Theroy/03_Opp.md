@@ -56,7 +56,12 @@ class Payment:
         """Updates the shared class-level balance directly."""
         cls.initial_balance = new_balance
 
-
+    @staticmethod #These methods take no input by default and can b used within the other methods of class as a helper method
+    def check_Valid(hour):
+        if hour > 12:
+            return True
+        
+        return False
 # Creating an instance (object) of Payment
 payment1 = Payment("Awais", 12)
 print(payment1.check_balance())  # Output: 988
@@ -64,6 +69,8 @@ print(payment1.check_balance())  # Output: 988
 # Calling a class method — no instance needed
 Payment.update_balance(2000)
 print(Payment.initial_balance)  # Output: 2000
+
+print(payment1.check_valid(13)) #output will b true
 ```
 
 ### Key Concepts from the Example
