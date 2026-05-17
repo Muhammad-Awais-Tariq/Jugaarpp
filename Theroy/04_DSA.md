@@ -15,3 +15,13 @@ class stack:
         return self.stack[-1]
 ```
 
+# Binary Tree:
+its a data strucutre that can have only have two childern and is used for traversal 
+
+    a  # The top is the root nood the rest are childe nodes
+   /  \
+   B    C   # b d e are subtree as they are tree in a tree
+  / \ 
+  D  E
+
+
