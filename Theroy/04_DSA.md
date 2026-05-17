@@ -1,93 +1,252 @@
-# Stacks
-its like a stack of book or any stack in it we can add or remove the elements but we can only add and remove from the stack and not for any other way
+# Data Structures: Stacks & Binary Trees
+
+---
+
+## 1. Stacks
+
+A stack is a **Last In, First Out (LIFO)** data structure — think of a stack of plates: you
+can only add a new plate on top, and you can only remove the top plate. You cannot insert or
+remove from the middle or bottom.
+
+**Real-world analogies:**
+- Browser back button (each page you visit is pushed; going back pops it)
+- Undo/Redo in text editors
+- Function call stack in programming (when a function calls another function)
+
+**Core operations:**
+| Operation | Description |
+|-----------|-------------|
+| `push(item)` | Add an item to the top |
+| `pop()` | Remove and return the top item |
+| `peek()` | View the top item without removing it |
+| `is_empty()` | Check whether the stack is empty |
+| `size()` | Return the number of items in the stack |
 
 ```python
-class stack:
+class Stack:
     def __init__(self):
         self.stack = []
-    def push(self , item):
-        self.stack.append(item)
+
+    def push(self, item):
+        self.stack.append(item)         # Add to the top
 
     def pop(self):
-        self.stack.pop()
+        if self.is_empty():
+            raise IndexError("Pop from an empty stack")
+        return self.stack.pop()         # Remove and return from the top
 
     def peek(self):
-        return self.stack[-1]
+        if self.is_empty():
+            raise IndexError("Peek at an empty stack")
+        return self.stack[-1]           # View top without removing
+
+    def is_empty(self):
+        return len(self.stack) == 0
+
+    def size(self):
+        return len(self.stack)
+
+    def __repr__(self):
+        return f"Stack (top → bottom): {self.stack[::-1]}"   #its printing the entire array this function tells the print to print the value not the memory location of object
+
+
+# --- Example Usage ---
+s = Stack()
+s.push(10)
+s.push(20)
+s.push(30)
+
+print(s)           # Stack (top → bottom): [30, 20, 10]  #its being printed using __repr__
+print(s.peek())    # 30  ← top item, not removed
+print(s.pop())     # 30  ← removed from top
+print(s.pop())     # 20
+print(s.size())    # 1
 ```
 
-# Binary Tree:
-its a data strucutre that can have only have two childern and is used for traversal 
+> **Key fix from original:** `pop()` should *return* the removed value, and both `pop()` and
+> `peek()` should guard against an empty stack.
 
-    a  # The top is the root nood the rest are childe nodes
-   /  \
-   B    C   # b d e are subtree as they are tree in a tree
-  / \ 
-  D  E
+---
 
-## Traversal
-### Preorder
-it means first the root then their will b left and the right subtree will b traversed
-A B  D E C 
+## 2. Binary Trees
 
-IF we have expression like 1 + 2 * 3 after the step one breaking it into token the step two will b converting them into the tree strucutre
-   +
-  /  \
+A **binary tree** is a hierarchical data structure where each node has **at most two children**,
+referred to as the **left child** and the **right child**.
+
+```
+        A          ← Root node (top of the tree)
+       / \
+      B   C        ← Children of A; B and C are each roots of their own subtrees
+     / \
+    D   E          ← Leaf nodes (no children)
+```
+
+**Key terminology:**
+- **Root** – the topmost node (no parent)
+- **Leaf** – a node with no children
+- **Subtree** – any node together with all its descendants (e.g. B, D, E form a subtree)
+- **Height** – the longest path from root to a leaf
+
+Binary trees are used in:
+- Expression parsing and compilers
+- File system hierarchies
+- Database indexing (B-trees)
+- Priority queues (heaps)
+
+---
+
+## 3. Tree Traversal
+
+Traversal means visiting every node in the tree in a specific order. There are three classic
+depth-first orders:
+
+### 3.1 Preorder — Root → Left → Right
+
+Visit the current node *before* its children. Good for copying a tree or generating prefix
+notation for expressions.
+
+**Order on our example tree:** `A → B → D → E → C`
+
+**Expression tree example:**
+
+```
+    +
+   / \
   1   *
      / \
-     2  3
-Traverssing it will effect how we evaluate it
+     2   3
+```
 
-### Postorder
-it mean first we will traverse left and then right and then will move to the root
-taking expression it will b 
-123*+
+Preorder gives: `+ 1 * 2 3` — this is **prefix notation** (operator comes first).  
+To evaluate: apply `+` to `1` and `(* 2 3)` → `1 + 6 = 7`.
 
-The post order allow us to compute like
-1*8+7
- +
- / \
- *  7 
-/ \
-1   8
+---
 
-it will be 18*7+ this is our interpretation of the expression 
+### 3.2 Inorder — Left → Root → Right
 
-This is same for the variable assigment as well like
+Visit left subtree, then the current node, then right subtree. For a **Binary Search Tree (BST)**
+this always produces values in *sorted order*.
+
+**Order on our example tree:** `D → B → E → A → C`
+
+**Expression tree example (same tree as above):**
+
+Inorder gives: `1 + 2 * 3` — this is standard **infix notation**, the one we write normally.
+
+---
+
+### 3.3 Postorder — Left → Right → Root
+
+Visit both children *before* the current node. Good for evaluating expressions and for deleting
+a tree (children before parent).
+
+**Order on our example tree:** `D → E → B → C → A`
+
+**Expression tree example:**
+
+```
+      +
+     / \
+     *   7
+    / \
+    1   8
+```
+
+Postorder gives: `1 8 * 7 +` — this is **Reverse Polish (postfix) notation**.  
+To evaluate: push operands onto a stack; when you see an operator, pop two operands and compute.
+  - Push `1`, push `8`
+  - See `*` → pop `8` and `1` → push `8` (= 1×8)
+  - Push `7`
+  - See `+` → pop `7` and `8` → result is `15`
+
+**Variable assignment also maps naturally to a tree:**
+
+```
 a = b
 
-   =
-  / \
-  a  b
+    =
+   / \
+  a   b
+```
+Postorder: `a b =` — evaluate operands before applying the assignment operator.
 
-### Binary tree in python
+---
+
+## 4. Binary Tree in Python
+
 ```python
-class node:
-    def __init__(self,value):
+class Node:
+    def __init__(self, value):
         self.value = value
-        self.left = None
-        self.right = None  # These represent left and right childs
+        self.left = None    # Left child
+        self.right = None   # Right child
 
-class tree:
-    def __init__(self,root):
-        self.root = node(root)
 
-    def preorder(self , start , record):  #start represting the starting node in the preorder traversal ,record will b empty list in the start
-        if start is not none:
-            record.append(start.value)   
-            record  = self.preoder(self.left, record)  # we are computing the left subtree with recurssion first
-            record = self.preoder(self.right, record) 
+class BinaryTree:
+    def __init__(self, root_value):
+        self.root = Node(root_value)
+
+    def preorder(self, start, record):
+        """Root → Left → Right"""
+        if start is not None:                              # Fixed: 'None' not 'none'
+            record.append(start.value)
+            record = self.preorder(start.left, record)    # Fixed: start.left, not self.left
+            record = self.preorder(start.right, record)   # Fixed: start.right, not self.right
         return record
 
-    def postorder(self , start , record):  #start represting the starting node in the preorder traversal ,record will b empty list in the start
-        if start is not none:
-            record  = self.postoder(self.left, record)  # we are computing the left subtree with recurssion first
-            record = self.postorder(self.right, record)
-        return record 
-tree1 = tree(5)
-tree.root.left = node(4)
-tree.root.right = node(7)   #adding left and right childs
-tree.preoder(tree.root,[])
-#    5
-#   / \
-#  4   7
+    def inorder(self, start, record):
+        """Left → Root → Right"""
+        if start is not None:
+            record = self.inorder(start.left, record)
+            record.append(start.value)
+            record = self.inorder(start.right, record)
+        return record
+
+    def postorder(self, start, record):
+        """Left → Right → Root"""
+        if start is not None:
+            record = self.postorder(start.left, record)
+            record = self.postorder(start.right, record)
+            record.append(start.value)                    # Fixed: this line was missing!
+        return record
+
+
+# --- Build the tree ---
+#       5
+#      / \
+#     4   7
+
+tree1 = BinaryTree(5)
+tree1.root.left = Node(4)    # Fixed: tree1, not tree
+tree1.root.right = Node(7)
+
+# --- Traversals ---
+print(tree1.preorder(tree1.root, []))   # [5, 4, 7]
+print(tree1.inorder(tree1.root, []))    # [4, 5, 7]
+print(tree1.postorder(tree1.root, []))  # [4, 7, 5]
 ```
+
+---
+
+## 5. Summary Table
+
+| Traversal | Order | Use Case |
+|-----------|-------|----------|
+| Preorder | Root → Left → Right | Copy a tree, prefix expressions |
+| Inorder | Left → Root → Right | Sorted output from BST, infix expressions |
+| Postorder | Left → Right → Root | Delete a tree, postfix/RPN expressions |
+
+---
+
+## 6. Bugs Fixed (from original notes)
+
+| Location | Bug | Fix |
+|----------|-----|-----|
+| `Stack.pop()` | Did not return the removed value | Added `return self.stack.pop()` |
+| `preorder` | `self.left` / `self.right` | Should be `start.left` / `start.right` |
+| `preorder` | Typo `self.preoder` | Fixed to `self.preorder` |
+| `postorder` | Missing `record.append(start.value)` | Added the append after recursive calls |
+| `postorder` | Typo `self.postoder` | Fixed to `self.postorder` |
+| All methods | `none` (lowercase) | Python uses `None` (capital N) |
+| Usage | `tree.root` | Should be `tree1.root` (the instance name) |
+| Inorder | Entire traversal was missing | Added as a new method |
