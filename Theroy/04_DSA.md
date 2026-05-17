@@ -71,10 +71,15 @@ class tree:
     def __init__(self,root):
         self.root = node(root)
 
+    def preorder(self , start , record):  #start represting the starting node in the preorder traversal ,record will b empty list in the start
+        if start is not none:
+            record.append(start.value)   
+            record  = self.preoder(self.left, record)  # we are computing the left subtree with recurssion first
+            record = self.preoder(self.right, record) 
 tree1 = tree(5)
 tree.root.left = node(4)
 tree.root.right = node(7)   #adding left and right childs
-
+tree.preoder(tree.root,[])
 #    5
 #   / \
 #  4   7
