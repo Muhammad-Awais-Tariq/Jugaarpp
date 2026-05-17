@@ -59,3 +59,23 @@ a = b
   / \
   a  b
 
+### Binary tree in python
+```python
+class node:
+    def __init__(self,value):
+        self.value = value
+        self.left = None
+        self.right = None  # These represent left and right childs
+
+class tree:
+    def __init__(self,root):
+        self.root = node(root)
+
+tree1 = tree(5)
+tree.root.left = node(4)
+tree.root.right = node(7)   #adding left and right childs
+
+#    5
+#   / \
+#  4   7
+```
