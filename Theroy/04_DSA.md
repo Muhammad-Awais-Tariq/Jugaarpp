@@ -237,16 +237,3 @@ print(tree1.postorder(tree1.root, []))  # [4, 7, 5]
 | Postorder | Left → Right → Root | Delete a tree, postfix/RPN expressions |
 
 ---
-
-## 6. Bugs Fixed (from original notes)
-
-| Location | Bug | Fix |
-|----------|-----|-----|
-| `Stack.pop()` | Did not return the removed value | Added `return self.stack.pop()` |
-| `preorder` | `self.left` / `self.right` | Should be `start.left` / `start.right` |
-| `preorder` | Typo `self.preoder` | Fixed to `self.preorder` |
-| `postorder` | Missing `record.append(start.value)` | Added the append after recursive calls |
-| `postorder` | Typo `self.postoder` | Fixed to `self.postorder` |
-| All methods | `none` (lowercase) | Python uses `None` (capital N) |
-| Usage | `tree.root` | Should be `tree1.root` (the instance name) |
-| Inorder | Entire traversal was missing | Added as a new method |
