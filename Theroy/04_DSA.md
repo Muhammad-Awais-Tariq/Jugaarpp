@@ -76,6 +76,13 @@ class tree:
             record.append(start.value)   
             record  = self.preoder(self.left, record)  # we are computing the left subtree with recurssion first
             record = self.preoder(self.right, record) 
+        return record
+
+    def postorder(self , start , record):  #start represting the starting node in the preorder traversal ,record will b empty list in the start
+        if start is not none:
+            record  = self.postoder(self.left, record)  # we are computing the left subtree with recurssion first
+            record = self.postorder(self.right, record)
+        return record 
 tree1 = tree(5)
 tree.root.left = node(4)
 tree.root.right = node(7)   #adding left and right childs
