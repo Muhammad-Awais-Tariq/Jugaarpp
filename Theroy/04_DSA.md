@@ -24,4 +24,38 @@ its a data strucutre that can have only have two childern and is used for traver
   / \ 
   D  E
 
+## Traversal
+### Preorder
+it means first the root then their will b left and the right subtree will b traversed
+A B  D E C 
+
+IF we have expression like 1 + 2 * 3 after the step one breaking it into token the step two will b converting them into the tree strucutre
+   +
+  /  \
+  1   *
+     / \
+     2  3
+Traverssing it will effect how we evaluate it
+
+### Postorder
+it mean first we will traverse left and then right and then will move to the root
+taking expression it will b 
+123*+
+
+The post order allow us to compute like
+1*8+7
+ +
+ / \
+ *  7 
+/ \
+1   8
+
+it will be 18*7+ this is our interpretation of the expression 
+
+This is same for the variable assigment as well like
+a = b
+
+   =
+  / \
+  a  b
 
